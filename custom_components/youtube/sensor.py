@@ -80,23 +80,21 @@ class YoutubeSensor(Entity):
             if exp < self.expiry:
                 return
             self.expiry = exp
-            title = info.split('<title>')[2].split('</')[0]
-            url = info.split('<link rel="alternate" href="')[2].split('"/>')[0]
-            if self.live or url != self.url:
-                self.stream, self.live, self.stream_start = await is_live(url, self._name, self.hass, self.session)
-            else:
-                _LOGGER.debug('%s - Skipping live check', self._name)
-            self.url = url
-            self.content_id = url.split('?v=')[1]
-            self.published = info.split('<published>')[2].split('</')[0]
-            thumbnail_url = info.split(
-                '<media:thumbnail url="')[1].split('"')[0]
-            self._state = html.unescape(title)
-            self._image = thumbnail_url
-            self.stars = info.split('<media:starRating count="')[1].split('"')[0]
-            self.views = info.split('<media:statistics views="')[1].split('"')[0]
             url = CHANNEL_LIVE_URL.format(self.channel_id)
             self.channel_live, self.channel_image = await is_channel_live(url, self.name, self.hass, self.session)
+            for video in info.split("<entry>"):
+                title = video.split('<title>')[2].split('</')[0]
+                url = video.split('<link rel="alternate" href="')[2].split('"/>')[0]
+                self.stream, self.live, self.stream_start = await is_live(url, self._name, self.hass, self.session)
+                if self.live and url != self.url:
+                    self.url = url
+                    self.content_id = url.split('?v=')[1]
+                    self.published = video.split('<published>')[2].split('</')[0]
+                    thumbnail_url = video.split('<media:thumbnail url="')[1].split('"')[0]
+                    self._state = html.unescape(title)
+                    self._image = thumbnail_url
+                    self.stars = video.split('<media:starRating count="')[1].split('"')[0]
+                    self.views = video.split('<media:statistics views="')[1].split('"')[0]
         except Exception as error:  # pylint: disable=broad-except
             _LOGGER.debug('%s - Could not update - %s', self._name, error)
 
