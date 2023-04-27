@@ -31,6 +31,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
 
 _LOGGER = logging.getLogger(__name__)
 
+SCAN_INTERVAL = timedelta(minutes=5)
 
 async def async_setup_platform(
         hass, config, async_add_entities, discovery_info=None):  # pylint: disable=unused-argument
@@ -70,7 +71,17 @@ class YoutubeSensor(Entity):
         self.channel_live = False
         self.channel_image = None
         self.expiry = parse('01 Jan 1900 00:00:00 UTC')
-        self.stream_start = None
+        self.stream_start = None   
+            
+        """Initialize the update manager."""
+        self.coordinator = DataUpdateCoordinator(
+            self.hass,
+            _LOGGER,
+            name=self.name",
+            update_method=self.async_update,
+            update_interval=self.SCAN_INTERVAL,
+        )
+        self.last_update = None
 
     async def async_update(self):
         """Update sensor."""
@@ -84,6 +95,7 @@ class YoutubeSensor(Entity):
             if exp < self.expiry:
                 return
             self.expiry = exp
+            self.last_update = now()
             for video in info.split("<entry>"):
                 title = video.split('<title>')[2].split('</')[0]
                 url = video.split('<link rel="alternate" href="')[2].split('"/>')[0]
