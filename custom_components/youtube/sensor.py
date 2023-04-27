@@ -67,21 +67,13 @@ class YoutubeSensor(Entity):
         self.channel_id = channel_id
         self._live_only = live_only
         self.url = None
+        self.embed_url = None
         self.content_id = None
         self.published = None
         self.channel_live = False
         self.channel_image = None
         self.expiry = parse('01 Jan 1900 00:00:00 UTC')
         self.stream_start = None   
-            
-        """Initialize the update manager."""
-        self.coordinator = DataUpdateCoordinator(
-            self.hass,
-            _LOGGER,
-            name=self._name,
-            update_method=self.async_update,
-            update_interval=self.SCAN_INTERVAL,
-        )
         self.last_update = None
 
     async def async_update(self):
@@ -103,6 +95,7 @@ class YoutubeSensor(Entity):
                 stream, live, stream_start = await is_live(url, self._name, self.hass, self.session)
                 if (self._live_only and live and url != self.url) or url != self.url:
                     self.url = url
+                    self.embed_url = 'https://www.youtube.com/embed/' + url.split('v=')[1].split('&')[0]
                     self.live = live
                     self.stream = stream
                     self.strean_start = stream_start
