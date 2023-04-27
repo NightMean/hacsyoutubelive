@@ -89,9 +89,9 @@ class YoutubeSensor(Entity):
                 return
             self.expiry = exp
             self.last_update = now()
-            for video in info.split("<entry>"):
-                title = video.split('<title>')[2].split('</')[0]
-                url = video.split('<link rel="alternate" href="')[2].split('"/>')[0]
+            for video in info.split('<entry>'):
+                title = video.split('<title>')[1].split('</')[0]
+                url = video.split('<link rel="alternate" href="')[1].split('"/>')[0]
                 stream, live, stream_start = await is_live(url, self._name, self.hass, self.session)
                 if (self._live_only and live and url != self.url) or url != self.url:
                     self.url = url
@@ -100,7 +100,7 @@ class YoutubeSensor(Entity):
                     self.stream = stream
                     self.strean_start = stream_start
                     self.content_id = url.split('?v=')[1]
-                    self.published = video.split('<published>')[2].split('</')[0]
+                    self.published = video.split('<published>')[1].split('</')[0]
                     thumbnail_url = video.split('<media:thumbnail url="')[1].split('"')[0]
                     self._state = html.unescape(title)
                     self._image = thumbnail_url
