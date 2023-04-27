@@ -17,6 +17,7 @@ import re
 import html
 
 CONF_CHANNEL_ID = 'channel_id'
+CONF_LIVE_ONLY = 'live_only'
 
 ICON = 'mdi:youtube'
 
@@ -25,6 +26,7 @@ CHANNEL_LIVE_URL = 'https://www.youtube.com/channel/{}'
 
 PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
     vol.Required(CONF_CHANNEL_ID): cv.string,
+    vol.Optional(CONF_LIVE_ONLY): cv.boolean,
 })
 
 _LOGGER = logging.getLogger(__name__)
@@ -33,8 +35,8 @@ _LOGGER = logging.getLogger(__name__)
 async def async_setup_platform(
         hass, config, async_add_entities, discovery_info=None):  # pylint: disable=unused-argument
     """Setup sensor platform."""
-    channel_id = config['channel_id']
-    live_only = config['live_only']|false
+    channel_id = config[CONF_CHANNEL_ID]
+    live_only = config[CONF_LIVE_ONLY]|false
     session = async_create_clientsession(hass)
     try:
         url = BASE_URL.format(channel_id)
