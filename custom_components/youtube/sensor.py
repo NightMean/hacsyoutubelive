@@ -34,6 +34,7 @@ async def async_setup_platform(
         hass, config, async_add_entities, discovery_info=None):  # pylint: disable=unused-argument
     """Setup sensor platform."""
     channel_id = config['channel_id']
+    live_only = config['live_only']|false
     session = async_create_clientsession(hass)
     try:
         url = BASE_URL.format(channel_id)
@@ -46,11 +47,11 @@ async def async_setup_platform(
         name = None
 
     if name is not None:
-        async_add_entities([YoutubeSensor(channel_id, name, session)], True)
+        async_add_entities([YoutubeSensor(channel_id, live_only, name, session)], True)
 
 class YoutubeSensor(Entity):
     """YouTube Sensor class"""
-    def __init__(self, channel_id, name, session):
+    def __init__(self, channel_id, live_only, name, session):
         self._state = None
         self.session = session
         self._image = None
@@ -60,6 +61,7 @@ class YoutubeSensor(Entity):
         self.live = False
         self._name = name
         self.channel_id = channel_id
+        self._live_only = live_only
         self.url = None
         self.content_id = None
         self.published = None
@@ -80,14 +82,15 @@ class YoutubeSensor(Entity):
             if exp < self.expiry:
                 return
             self.expiry = exp
-            url = CHANNEL_LIVE_URL.format(self.channel_id)
-            self.channel_live, self.channel_image = await is_channel_live(url, self.name, self.hass, self.session)
             for video in info.split("<entry>"):
                 title = video.split('<title>')[2].split('</')[0]
                 url = video.split('<link rel="alternate" href="')[2].split('"/>')[0]
-                self.stream, self.live, self.stream_start = await is_live(url, self._name, self.hass, self.session)
-                if self.live and url != self.url:
+                stream, live, stream_start = await is_live(url, self._name, self.hass, self.session)
+                if (self._live_only and live and url != self.url) or url != self.url:
                     self.url = url
+                    self.live = live
+                    self.stream = stream
+                    self.strean_start = stream_start
                     self.content_id = url.split('?v=')[1]
                     self.published = video.split('<published>')[2].split('</')[0]
                     thumbnail_url = video.split('<media:thumbnail url="')[1].split('"')[0]
@@ -95,6 +98,11 @@ class YoutubeSensor(Entity):
                     self._image = thumbnail_url
                     self.stars = video.split('<media:starRating count="')[1].split('"')[0]
                     self.views = video.split('<media:statistics views="')[1].split('"')[0]
+                    url = CHANNEL_LIVE_URL.format(self.channel_id)
+                    self.channel_live, self.channel_image = await is_channel_live(url, self.name, self.hass, self.session)
+                    break;
+                else:
+                    break;
         except Exception as error:  # pylint: disable=broad-except
             _LOGGER.debug('%s - Could not update - %s', self._name, error)
 
