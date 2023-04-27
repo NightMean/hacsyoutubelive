@@ -153,7 +153,7 @@ class YoutubeSensor(Entity):
                 'live': self.live,
                 'channel_is_live': self.channel_live,
                 'channel_image': self.channel_image,
-                'last_updated': self.last_updated}
+                'last_update': self.last_update}
 
 async def is_live(url, name, hass, session):
     """Return bool if video is stream and bool if video is live"""
