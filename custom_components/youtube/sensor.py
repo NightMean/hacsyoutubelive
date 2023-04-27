@@ -85,8 +85,8 @@ class YoutubeSensor(Entity):
                 response = await self.session.get(url)
                 info = await response.text()
             exp = parse(response.headers['Expires'])
-            if exp < self.expiry:
-                return
+            """if exp < self.expiry:
+                return"""
             self.expiry = exp
             self.last_update = now()
             for video in info.split('<entry>')[1:]:
