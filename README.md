@@ -1,7 +1,7 @@
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
 # youtube
 
-_A platform which give you info about the newest live video on a channel._
+_A platform which give you info about the newest video on a channel._
 
 **This uses web scraping, a better implementation will be to use the API.**
 
@@ -31,6 +31,7 @@ To get started put all the files from`/custom_components/youtube/` here:
 sensor:
   platform: youtube
   channel_id: UCZ2Ku6wrhdYDHCaBzLaA3bw
+  live_only: false
 ```
 
 ## Configuration variables
@@ -39,6 +40,7 @@ key | type | description
 :--- | :--- | :---
 **platform (Required)** | string | The platform name.
 **channel_id (Required)** | string | The Channel ID of the Youtube channel.
+**live_only (Optional)** | boolena | Only select live streams
 
 ## State and Attributes
 
