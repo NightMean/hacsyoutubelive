@@ -36,7 +36,7 @@ async def async_setup_platform(
         hass, config, async_add_entities, discovery_info=None):  # pylint: disable=unused-argument
     """Setup sensor platform."""
     channel_id = config[CONF_CHANNEL_ID]
-    live_only = config[CONF_LIVE_ONLY]|false
+    live_only = config[CONF_LIVE_ONLY]
     session = async_create_clientsession(hass)
     try:
         url = BASE_URL.format(channel_id)
