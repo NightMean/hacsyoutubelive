@@ -143,6 +143,7 @@ class YoutubeSensor(Entity):
     def extra_state_attributes(self):
         """Attributes."""
         return {'url': self.url,
+                'embed_url': self.embed_url,
                 'content_id': self.content_id,
                 'published': self.published,
                 'stars': self.stars,
@@ -151,7 +152,8 @@ class YoutubeSensor(Entity):
                 'stream_start': self.stream_start,
                 'live': self.live,
                 'channel_is_live': self.channel_live,
-                'channel_image': self.channel_image}
+                'channel_image': self.channel_image,
+                'last_updated': self.last_updated}
 
 async def is_live(url, name, hass, session):
     """Return bool if video is stream and bool if video is live"""
