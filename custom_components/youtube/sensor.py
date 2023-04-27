@@ -77,7 +77,7 @@ class YoutubeSensor(Entity):
         self.coordinator = DataUpdateCoordinator(
             self.hass,
             _LOGGER,
-            name=self.name,
+            name=self._name,
             update_method=self.async_update,
             update_interval=self.SCAN_INTERVAL,
         )
