@@ -16,6 +16,7 @@ from dateutil.parser import parse
 import re
 import html
 from datetime import timedelta
+from datetime import datetime
 
 CONF_CHANNEL_ID = 'channel_id'
 CONF_LIVE_ONLY = 'live_only'
