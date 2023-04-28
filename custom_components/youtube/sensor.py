@@ -33,7 +33,7 @@ PLATFORM_SCHEMA = PLATFORM_SCHEMA.extend({
 
 _LOGGER = logging.getLogger(__name__)
 
-"""SCAN_INTERVAL = timedelta(minutes=5)"""
+SCAN_INTERVAL = timedelta(minutes=1)
 
 async def async_setup_platform(
         hass, config, async_add_entities, discovery_info=None):  # pylint: disable=unused-argument
