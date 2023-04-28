@@ -40,7 +40,7 @@ key | type | description
 :--- | :--- | :---
 **platform (Required)** | string | The platform name.
 **channel_id (Required)** | string | The Channel ID of the Youtube channel.
-**live_only (Optional)** | boolena | Only select live streams
+**live_only (Optional)** | boolean | Only select live streams
 
 ## State and Attributes
 
