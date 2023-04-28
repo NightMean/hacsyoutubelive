@@ -99,7 +99,7 @@ class YoutubeSensor(Entity):
                     self.embed_url = 'https://www.youtube.com/embed/' + url.split('v=')[1].split('&')[0]
                     self.live = live
                     self.stream = stream
-                    self.strean_start = stream_start
+                    self.stream_start = stream_start
                     self.content_id = url.split('?v=')[1]
                     self.published = video.split('<published>')[1].split('</')[0]
                     thumbnail_url = video.split('<media:thumbnail url="')[1].split('"')[0]
