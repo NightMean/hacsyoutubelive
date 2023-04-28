@@ -51,6 +51,7 @@ key | type | description
 ### Attributes
 
 * url: URL of the most recent video
+* embed_url: URL of the most recent video for embedding
 * content_id: the content ID (useful for sending to certain media players)
 * published: The time and date the video was published
 * stars: The 'stars' recieved on youtube. (This is all reactions both 👍 and 👎 combined)
