@@ -88,7 +88,7 @@ class YoutubeSensor(Entity):
             """if exp < self.expiry:
                 return"""
             self.expiry = exp
-            self.last_update = now()
+            self.last_update = datetime.now()
             for video in info.split('<entry>')[1:]:
                 title = video.split('<title>')[1].split('</')[0]
                 url = video.split('<link rel="alternate" href="')[1].split('"/>')[0]
