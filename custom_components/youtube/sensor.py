@@ -90,6 +90,7 @@ class YoutubeSensor(Entity):
                 return"""
             self.expiry = exp
             self.last_update = datetime.now()
+            ok = False
             for video in info.split('<entry>')[1:]:
                 title = video.split('<title>')[1].split('</')[0]
                 url = video.split('<link rel="alternate" href="')[1].split('"/>')[0]
@@ -109,9 +110,14 @@ class YoutubeSensor(Entity):
                     self.views = video.split('<media:statistics views="')[1].split('"')[0]
                     url = CHANNEL_LIVE_URL.format(self.channel_id)
                     self.channel_live, self.channel_image = await is_channel_live(url, self.name, self.hass, self.session)
+                    ok = True
                     break;
                 else:
-                    break;
+                    """break;"""
+            if not ok:
+                """No videos found, reset live flags incase of live_only checks"""
+                self.live = False
+                self.channel_live = False
         except Exception as error:  # pylint: disable=broad-except
             _LOGGER.debug('%s - Could not update - %s', self._name, error)
 
