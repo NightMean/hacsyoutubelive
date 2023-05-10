@@ -95,21 +95,22 @@ class YoutubeSensor(Entity):
                 title = video.split('<title>')[1].split('</')[0]
                 url = video.split('<link rel="alternate" href="')[1].split('"/>')[0]
                 stream, live, stream_start = await is_live(url, self._name, self.hass, self.session)
-                if (self._live_only and live and url != self.url) or (not self._live_only and url != self.url):
-                    self.url = url
-                    self.embed_url = 'https://www.youtube.com/embed/' + url.split('v=')[1].split('&')[0]
-                    self.live = live
-                    self.stream = stream
-                    self.stream_start = stream_start
-                    self.content_id = url.split('?v=')[1]
-                    self.published = video.split('<published>')[1].split('</')[0]
-                    thumbnail_url = video.split('<media:thumbnail url="')[1].split('"')[0]
-                    self._state = html.unescape(title)
-                    self._image = thumbnail_url
-                    self.stars = video.split('<media:starRating count="')[1].split('"')[0]
-                    self.views = video.split('<media:statistics views="')[1].split('"')[0]
-                    url = CHANNEL_LIVE_URL.format(self.channel_id)
-                    self.channel_live, self.channel_image = await is_channel_live(url, self.name, self.hass, self.session)
+                if (self._live_only and live) or (not self._live_only):
+                    if url != self.url:
+                        self.url = url
+                        self.embed_url = 'https://www.youtube.com/embed/' + url.split('v=')[1].split('&')[0]
+                        self.live = live
+                        self.stream = stream
+                        self.stream_start = stream_start
+                        self.content_id = url.split('?v=')[1]
+                        self.published = video.split('<published>')[1].split('</')[0]
+                        thumbnail_url = video.split('<media:thumbnail url="')[1].split('"')[0]
+                        self._state = html.unescape(title)
+                        self._image = thumbnail_url
+                        self.stars = video.split('<media:starRating count="')[1].split('"')[0]
+                        self.views = video.split('<media:statistics views="')[1].split('"')[0]
+                        url = CHANNEL_LIVE_URL.format(self.channel_id)
+                        self.channel_live, self.channel_image = await is_channel_live(url, self.name, self.hass, self.session)
                     ok = True
                     break;
                 else:
