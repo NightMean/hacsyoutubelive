@@ -1,5 +1,7 @@
 [![hacs_badge](https://img.shields.io/badge/HACS-Default-41BDF5.svg?style=for-the-badge)](https://github.com/hacs/integration)
-# youtube
+# youtube_custom_component
+### **This fork is modified to work alongside with the [official Youtube integration](https://www.home-assistant.io/integrations/youtube/)**
+#
 
 _A platform which give you info about the newest video on a channel._
 
@@ -29,7 +31,7 @@ To get started put all the files from`/custom_components/youtube/` here:
 
 ```yaml
 sensor:
-  platform: youtube
+  platform: youtube_custom_component
   channel_id: UCZ2Ku6wrhdYDHCaBzLaA3bw
   live_only: false
 ```
