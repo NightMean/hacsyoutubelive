@@ -1,5 +1,5 @@
 {
-  "name": "youtube",
+  "name": "youtube_custom_component",
   "zip_release": true,
   "filename": "youtube.zip",
   "iot_class": "Cloud Poll",
